@@ -6,22 +6,26 @@ G = 6.6743e-11 # m^(3) kg^(-1) s^(-2)
 c = 299792458 # m^(1) s^(-1)
 pi = 3.14159265358979 # Dimensionless
 I_zz = 10e38 # kg^(1) m^(2)
-Birthrate = 0.01 # Once per century
+Birthrate = 0.01 # 1 per 100 Yr
 Ti = 0 # Yr
 Tf = 100e6 # Yr
-N = Birthrate*Tf # Number of gravitars
+N = Birthrate * Tf # Number of gravitars
 R_E = 8.25 # kpc (Galactic-Earth distance)
 
+# Conversions
+kpc = 3.08567758128e19 # m
+Yr = 31556926 # s
+
 # Bounds
-ri_min = 0 # kpc
-ri_max = 15 # kpc
-zi_min = 0 # kpc
-zi_max = 1 # kpc
+ri_min = 0 * kpc # m
+ri_max = 15 * kpc # m
+zi_min = 0 * kpc # m
+zi_max = 1 * kpc # m
 Pi_min = 0 # s
 Pi_avg = 0.1 # s
 Pi_max = float('inf') # s
-age_min = 0 # Yr
-age_max = Tf # Yr
+age_min = 0 * Yr # s
+age_max = Tf * Yr # s
 ellipticity_min = 10e-9 # Dimensionless
 ellipticity_avg = 10e-8 # Dimensionless
 ellipticity_max = 10e-5 # Dimensionless
@@ -30,10 +34,8 @@ ellipticity_max = 10e-5 # Dimensionless
 import numpy as np
 import matplotlib.pyplot as plt
 
-class GravitarsSimulator:
-    def __init__(self):
-        pass
-
+class Gravitar:
+    
     def pdf_r(self, ri):
         # Define your PDF for radial displacement ri
         # Example: return some_probability_density_function_for_r
@@ -84,8 +86,8 @@ class GravitarsSimulator:
         
         return results
 
-# Create an instance of the GravitarsSimulator class
-simulator = GravitarsSimulator()
+# Create an instance of the Gravitar class
+simulator = Gravitar()
 
 # Simulate gravitars with N
 simulation_results = simulator.simulate(N)
