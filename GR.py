@@ -26,9 +26,9 @@ Pi_avg = 0.1 # s
 Pi_max = float('inf') # s
 age_min = 0 * Yr # s
 age_max = Tf * Yr # s
-ellipticity_min = 10e-9 # Dimensionless
-ellipticity_avg = 10e-8 # Dimensionless
-ellipticity_max = 10e-5 # Dimensionless
+e_min = 10e-9 # Dimensionless
+e_avg = 10e-8 # Dimensionless
+e_max = 10e-5 # Dimensionless
 
 
 import numpy as np
@@ -51,11 +51,11 @@ class Gravitar:
     def pdf_age(self, age):
         return 1 / Tf
 
-    def pdf_ellipticity(self, ellipticity):
-        # Define your PDF for ellipticity
-        # Example: return some_probability_density_function_for_ellipticity
+    def pdf_e(self, e):
+        # Define your PDF for e
+        # Example: return some_probability_density_function_for_e
         
-    def intrinsic_strain(self, ri, zi, Pi, age, ellipticity):
+    def intrinsic_strain(self, ri, zi, Pi, age, e):
         # Define your function to calculate intrinsic strain amplitude
         # Example: return some_calculation_function_for_intrinsic_strain
 
@@ -66,22 +66,22 @@ class Gravitar:
             return 0
 
     def simulate(self, N):
-        results = {'ri': [], 'zi': [], 'Pi': [], 'age': [], 'ellipticity': [], 'detectability': []}
+        results = {'ri': [], 'zi': [], 'Pi': [], 'age': [], 'e': [], 'detectability': []}
         for _ in range(N):
             ri = np.random.choice(np.linspace(ri_min, ri_max, N), p=self.pdf_r(np.linspace(ri_min, ri_max, N)))
             zi = np.random.choice(np.linspace(zi_min, zi_max, N), p=self.pdf_z(np.linspace(zi_min, zi_max, N)))
             Pi = np.random.choice(np.linspace(Pi_min, Pi_max, N), p=self.pdf_P(np.linspace(Pi_min, Pi_max, N)))
             age = np.random.choice(np.linspace(age_min, age_max, N), p=self.pdf_age(np.linspace(age_min, age_max, N)))
-            ellipticity = np.random.choice(np.linspace(ellipticity_min, ellipticity_max, N), p=self.pdf_ellipticity(np.linspace(ellipticity_min, ellipticity_max, N)))
+            e = np.random.choice(np.linspace(e_min, e_max, N), p=self.pdf_e(np.linspace(e_min, e_max, N)))
             
-            h_0 = self.intrinsic_strain(ri, zi, Pi, age, ellipticity)
+            h_0 = self.intrinsic_strain(ri, zi, Pi, age, e)
             detectability = self.decide_detectability(h_0, threshold)
             
             results['ri'].append(ri)
             results['zi'].append(zi)
             results['Pi'].append(Pi)
             results['age'].append(age)
-            results['ellipticity'].append(ellipticity)
+            results['e'].append(e)
             results['detectability'].append(detectability)
         
         return results
@@ -93,7 +93,7 @@ simulator = Gravitar()
 simulation_results = simulator.simulate(N)
 
 # Plot the results
-variables = ['ri', 'zi', 'Pi', 'age', 'ellipticity']
+variables = ['ri', 'zi', 'Pi', 'age', 'e']
 plt.figure(figsize=(12, 8))
 for var in variables:
     plt.hist(simulation_results[var], bins=30, alpha=0.5, label=var)
