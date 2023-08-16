@@ -68,11 +68,11 @@ class Gravitar:
     def simulate(self, N):
         results = {'ri': [], 'zi': [], 'Pi': [], 'age': [], 'ellipticity': [], 'detectability': []}
         for _ in range(N):
-            ri = np.random.choice(np.linspace(ri_min, ri_max, num_points), p=self.pdf_r(np.linspace(ri_min, ri_max, num_points)))
-            zi = np.random.choice(np.linspace(zi_min, zi_max, num_points), p=self.pdf_z(np.linspace(zi_min, zi_max, num_points)))
-            Pi = np.random.choice(np.linspace(Pi_min, Pi_max, num_points), p=self.pdf_P(np.linspace(Pi_min, Pi_max, num_points)))
-            age = np.random.choice(np.linspace(age_min, age_max, num_points), p=self.pdf_age(np.linspace(age_min, age_max, num_points)))
-            ellipticity = np.random.choice(np.linspace(ellipticity_min, ellipticity_max, num_points), p=self.pdf_ellipticity(np.linspace(ellipticity_min, ellipticity_max, num_points)))
+            ri = np.random.choice(np.linspace(ri_min, ri_max, N), p=self.pdf_r(np.linspace(ri_min, ri_max, N)))
+            zi = np.random.choice(np.linspace(zi_min, zi_max, N), p=self.pdf_z(np.linspace(zi_min, zi_max, N)))
+            Pi = np.random.choice(np.linspace(Pi_min, Pi_max, N), p=self.pdf_P(np.linspace(Pi_min, Pi_max, N)))
+            age = np.random.choice(np.linspace(age_min, age_max, N), p=self.pdf_age(np.linspace(age_min, age_max, N)))
+            ellipticity = np.random.choice(np.linspace(ellipticity_min, ellipticity_max, N), p=self.pdf_ellipticity(np.linspace(ellipticity_min, ellipticity_max, N)))
             
             h_0 = self.intrinsic_strain(ri, zi, Pi, age, ellipticity)
             detectability = self.decide_detectability(h_0, threshold)
