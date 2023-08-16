@@ -54,7 +54,7 @@ class Gravitar:
     def pdf_ellipticity(self, ellipticity):
         # Define your PDF for ellipticity
         # Example: return some_probability_density_function_for_ellipticity
-
+        
     def intrinsic_strain(self, ri, zi, Pi, age, ellipticity):
         # Define your function to calculate intrinsic strain amplitude
         # Example: return some_calculation_function_for_intrinsic_strain
