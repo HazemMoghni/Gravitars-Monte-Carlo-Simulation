@@ -27,48 +27,74 @@ ellipticity_avg = 10e-8 # Dimensionless
 ellipticity_max = 10e-5 # Dimensionless
 
 
+import numpy as np
+import matplotlib.pyplot as plt
 
-def pdf_r(ri):
+class GravitarsSimulator:
+    def __init__(self):
+        pass
 
-def pdf_z(zi):
+    def pdf_r(self, ri):
+        # Define your PDF for radial displacement ri
+        # Example: return some_probability_density_function_for_r
 
-def pdf_P(Pi):
+    def pdf_z(self, zi):
+        # Define your PDF for vertical displacement zi
+        # Example: return some_probability_density_function_for_z
 
-def pdf_age(age):
-    return 1/Tf
+    def pdf_P(self, Pi):
+        # Define your PDF for initial period of rotation Pi
+        # Example: return some_probability_density_function_for_Pi
 
-def pdf_ellipticity(ellipticity):
+    def pdf_age(self, age):
+        return 1 / Tf
 
-def intrinsic_strain(ri, zi, Pi, age, ellipticity):
+    def pdf_ellipticity(self, ellipticity):
+        # Define your PDF for ellipticity
+        # Example: return some_probability_density_function_for_ellipticity
 
-def detectability(h_0, threshold):
-    if h_0 >= threshold:
-        return 1
-    else:
-        return 0
+    def intrinsic_strain(self, ri, zi, Pi, age, ellipticity):
+        # Define your function to calculate intrinsic strain amplitude
+        # Example: return some_calculation_function_for_intrinsic_strain
 
-results = {'ri': [], 'zi': [], 'Pi': [], 'age': [], 'ellipticity': [], 'detectability': []}
-for _ in range(N):
-    ri = np.random.choice(np.linspace(ri_min, ri_max, num_points), p=pdf_r(np.linspace(ri_min, ri_max, num_points)))  # Sample ri from PDF
-    zi = np.random.choice(np.linspace(zi_min, zi_max, num_points), p=pdf_z(np.linspace(zi_min, zi_max, num_points)))  # Sample zi from PDF
-    Pi = np.random.choice(np.linspace(Pi_min, Pi_max, num_points), p=pdf_P(np.linspace(Pi_min, Pi_max, num_points)))  # Sample Pi from PDF
-    age = np.random.choice(np.linspace(age_min, age_max, num_points), p=pdf_age(np.linspace(age_min, age_max, num_points)))  # Sample age from PDF
-    ellipticity = np.random.choice(np.linspace(ellipticity_min, ellipticity_max, num_points), p=pdf_ellipticity(np.linspace(ellipticity_min, ellipticity_max, num_points)))  # Sample ellipticity from PDF
-    
-    h_0 = intrinsic_strain(ri, zi, Pi, age, ellipticity)
-    detectability = decide_detectability(h_0, threshold)
-    
-    results['ri'].append(ri)
-    results['zi'].append(zi)
-    results['Pi'].append(Pi)
-    results['age'].append(age)
-    results['ellipticity'].append(ellipticity)
-    results['detectability'].append(detectability)
+    def decide_detectability(self, h_0, threshold):
+        if h_0 >= threshold:
+            return 1
+        else:
+            return 0
 
+    def simulate(self, N):
+        results = {'ri': [], 'zi': [], 'Pi': [], 'age': [], 'ellipticity': [], 'detectability': []}
+        for _ in range(N):
+            ri = np.random.choice(np.linspace(ri_min, ri_max, num_points), p=self.pdf_r(np.linspace(ri_min, ri_max, num_points)))
+            zi = np.random.choice(np.linspace(zi_min, zi_max, num_points), p=self.pdf_z(np.linspace(zi_min, zi_max, num_points)))
+            Pi = np.random.choice(np.linspace(Pi_min, Pi_max, num_points), p=self.pdf_P(np.linspace(Pi_min, Pi_max, num_points)))
+            age = np.random.choice(np.linspace(age_min, age_max, num_points), p=self.pdf_age(np.linspace(age_min, age_max, num_points)))
+            ellipticity = np.random.choice(np.linspace(ellipticity_min, ellipticity_max, num_points), p=self.pdf_ellipticity(np.linspace(ellipticity_min, ellipticity_max, num_points)))
+            
+            h_0 = self.intrinsic_strain(ri, zi, Pi, age, ellipticity)
+            detectability = self.decide_detectability(h_0, threshold)
+            
+            results['ri'].append(ri)
+            results['zi'].append(zi)
+            results['Pi'].append(Pi)
+            results['age'].append(age)
+            results['ellipticity'].append(ellipticity)
+            results['detectability'].append(detectability)
+        
+        return results
+
+# Create an instance of the GravitarsSimulator class
+simulator = GravitarsSimulator()
+
+# Simulate gravitars with N
+simulation_results = simulator.simulate(N)
+
+# Plot the results
 variables = ['ri', 'zi', 'Pi', 'age', 'ellipticity']
 plt.figure(figsize=(12, 8))
 for var in variables:
-    plt.hist(results[var], bins=30, alpha=0.5, label=var)
+    plt.hist(simulation_results[var], bins=30, alpha=0.5, label=var)
 plt.xlabel('Variable Value')
 plt.ylabel('Number of Stars')
 plt.legend()
