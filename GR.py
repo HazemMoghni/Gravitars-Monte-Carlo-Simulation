@@ -49,7 +49,7 @@ class Gravitar:
         return a * ri / R_exp**2 * math.exp(-ri / R_exp)
 
     def pdf_z(self, zi):
-        return 1 / (2 * z_0) * math.exp(- zi / z_0)
+        return 1 / (2 * h_z) * math.exp(- zi / h_z)
 
     def pdf_phi(self, phi):
         return 1 / pi
