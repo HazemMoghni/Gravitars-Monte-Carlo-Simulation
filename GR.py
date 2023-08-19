@@ -88,6 +88,7 @@ class Gravitar:
             
             results['ri'].append(ri)
             results['zi'].append(zi)
+            results['phi'].append(phi)
             results['Pi'].append(Pi)
             results['age'].append(age)
             results['e'].append(e)
