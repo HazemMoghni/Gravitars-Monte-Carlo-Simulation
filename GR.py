@@ -16,6 +16,7 @@ R_E = 8.2 * kpc # m (Galactic-Earth distance)
 h_z = 0.075 * kpc # m
 R_exp = 4.5 * kpc # m
 a = 1.18285 # dimensionless
+tau = -2.46493285798560e-28
 
 # Conversions
 kpc = 3.08567758128e19 # m
@@ -54,14 +55,13 @@ class Gravitar:
         return 1 / pi
         
     def pdf_P(self, Pi):
-        return math.log(e, 10) / (Pi * Pi_avg * (2 pi)**(1/2) ) * math.exp( (math.log(Pi,10) - Pi_avg)^2 / (2 Pi_std**2) )
+        return math.log(e, 10) / (Pi * Pi_avg * (2 pi)**(1/2) ) * math.exp( - (math.log(Pi,10) - Pi_avg)^2 / (2 Pi_std**2) )
 
     def pdf_age(self, age):
         return 1 / Tf
 
     def pdf_e(self, ellipticity):
-        # Define your PDF for e
-        # Example: return some_probability_density_function_for_e
+        return math.exp(-ellipticity/tau) / (tau * (1 - math.exp(-ellipticity_max/tau)))
         
     def intrinsic_strain(self, ri, zi, Pi, age, ellipticity):
         # Define your function to calculate intrinsic strain amplitude
