@@ -64,15 +64,13 @@ class Gravitar:
         return math.exp(-ellipticity/tau) / (tau * (1 - math.exp(-ellipticity_max/tau)))
 
     def f_GW(Pi, ellipticity, age):
-        f_GW = (Pi**(4)/16 + (128 * pi**(4) * G * ellipticity**2 * I_zz * age) / (5 * c**5))**(-1/4)
-        return f_GW
+        return (Pi**(4)/16 + (128 * pi**(4) * G * ellipticity**2 * I_zz * age) / (5 * c**5))**(-1/4)
         
-    def f_GW(ri, zi, phi):
-        d = (zi**2 + (R_E - math.cos(phi)*r)**2 + (math.sin(phi)*r)**2)**(1/2)
-        return d
+    def d(ri, zi, phi):
+        return (zi**2 + (R_E - math.cos(phi)*r)**2 + (math.sin(phi)*r)**2)**(1/2)
         
     def intrinsic_strain(self, ri, zi, Pi, age, ellipticity, f_GW, d):
-        return (4 * pi**2 * G * ellipticity * I_zz * f_GW**2 ) / (c**4 * d)
+        return (4 * pi**2 * G * ellipticity * I_zz * f_GW(Pi, ellipticity, age)**2 ) / (c**4 * d(ri, zi, phi))
 
     def decide_detectability(self, h_0, threshold):
         if h_0 >= threshold:
