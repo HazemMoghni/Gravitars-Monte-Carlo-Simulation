@@ -5,26 +5,30 @@ import matplotlib.pyplot as plt
 G = 6.6743e-11 # m^(3) kg^(-1) s^(-2)
 c = 299792458 # m^(1) s^(-1)
 pi = 3.14159265358979 # Dimensionless
-I_zz = 10e38 # kg^(1) m^(2)
+I_zz = 1e38 # kg^(1) m^(2)
 Birthrate = 0.01 # 1 per 100 Yr
 Ti = 0 # Yr
 Tf = 100e6 # Yr
 N = Birthrate * Tf # Number of gravitars
-R_E = 8.25 # kpc (Galactic-Earth distance)
+R_E = 8.2 * kpc # m (Galactic-Earth distance)
+h_z = 0.075 * kpc # m
+R_exp = 4.5 * kpc # m
 
 # Conversions
 kpc = 3.08567758128e19 # m
-Yr = 31556926 # s
+Yr = 31557600 # s
 
 # Bounds
 ri_min = 0 * kpc # m
 ri_max = 15 * kpc # m
 zi_min = 0 * kpc # m
-zi_max = 15 * kpc # m
+zi_max = float('inf') # m
+phi_min = 0 # rad
+phi_max = pi # rad
 Pi_min = 0 # s
 Pi_avg = 0.1 # s
 Pi_max = float('inf') # s
-age_min = 0 * Yr # s
+age_min = 0 # s
 age_max = Tf * Yr # s
 e_min = 10e-9 # Dimensionless
 e_avg = 10e-8 # Dimensionless
@@ -44,6 +48,10 @@ class Gravitar:
         # Define your PDF for vertical displacement zi
         # Example: return some_probability_density_function_for_z
 
+    def pdf_phi(self, phi):
+        # Define your PDF for azimuthal angle phi
+        # Example: return some_probability_density_function_for_phi
+        
     def pdf_P(self, Pi):
         # Define your PDF for initial period of rotation Pi
         # Example: return some_probability_density_function_for_Pi
@@ -66,10 +74,11 @@ class Gravitar:
             return 0
 
     def simulate(self, N):
-        results = {'ri': [], 'zi': [], 'Pi': [], 'age': [], 'e': [], 'detectability': []}
+        results = {'ri': [], 'zi': [], 'phi': [], 'Pi': [], 'age': [], 'e': [], 'detectability': []}
         for _ in range(N):
             ri = np.random.choice(np.linspace(ri_min, ri_max, N), p=self.pdf_r(np.linspace(ri_min, ri_max, N)))
             zi = np.random.choice(np.linspace(zi_min, zi_max, N), p=self.pdf_z(np.linspace(zi_min, zi_max, N)))
+            phi = np.random.choice(np.linspace(phi_min, phi_max, N), p=self.pdf_phi(np.linspace(phi_min, phi_max, N)))
             Pi = np.random.choice(np.linspace(Pi_min, Pi_max, N), p=self.pdf_P(np.linspace(Pi_min, Pi_max, N)))
             age = np.random.choice(np.linspace(age_min, age_max, N), p=self.pdf_age(np.linspace(age_min, age_max, N)))
             e = np.random.choice(np.linspace(e_min, e_max, N), p=self.pdf_e(np.linspace(e_min, e_max, N)))
