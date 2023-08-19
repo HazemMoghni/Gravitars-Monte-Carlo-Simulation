@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import math
 import csv
 
@@ -16,7 +16,7 @@ I_zz = 1e38  # kg^(1) m^(2)
 Birthrate = 0.01  # 1 per 100 Yr
 Ti = 0  # Yr
 Tf = 100e6  # Yr
-N = Birthrate * Tf  # Number of gravitars
+N = 10  # Number of gravitars
 R_E = 8.2 * kpc  # m (Galactic-Earth distance)
 h_z = 0.075 * kpc  # m
 R_exp = 4.5 * kpc  # m
@@ -118,7 +118,7 @@ simulation_results = simulator.simulate(N)
 # Save the results to a CSV file
 csv_filename = 'gravitar_simulation_results.csv'
 with open(csv_filename, mode='w', newline='') as csvfile:
-    fieldnames = ['ri', 'zi', 'phi', 'Pi', 'age', 'ellipticity', 'detectability']
+    fieldnames = ['ri', 'zi', 'phi', 'Pi', 'age', 'ellipticity']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
     for i in range(N):
@@ -128,6 +128,5 @@ with open(csv_filename, mode='w', newline='') as csvfile:
             'phi': simulation_results['phi'][i],
             'Pi': simulation_results['Pi'][i],
             'age': simulation_results['age'][i],
-            'ellipticity': simulation_results['ellipticity'][i],
-            'detectability': simulation_results['detectability'][i]
+            'ellipticity': simulation_results['ellipticity'][i]
         })
