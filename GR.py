@@ -1,6 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+import csv
+
+# Conversions
+kpc = 3.08567758128e19  # m
+Yr = 31557600  # s
 
 # Constants
 G = 6.6743e-11  # m^(3) kg^(-1) s^(-2)
@@ -18,10 +23,6 @@ R_exp = 4.5 * kpc  # m
 a = 1.18285  # Dimensionless
 tau = -2.46493285798560e-28 # Dimensionless
 
-# Conversions
-kpc = 3.08567758128e19  # m
-Yr = 31557600  # s
-
 # Bounds
 ri_min = 0 * kpc  # m
 ri_max = 15 * kpc  # m
@@ -35,9 +36,9 @@ Pi_std = 0.1  # s
 Pi_max = float('inf')  # s
 age_min = 0  # s
 age_max = Tf * Yr  # s
-ellipticity_min = 10e-9  # Dimensionless
-ellipticity_avg = 10e-8  # Dimensionless
-ellipticity_max = 10e-5  # Dimensionless
+ellipticity_min = 1e-9  # Dimensionless
+ellipticity_avg = 1e-8  # Dimensionless
+ellipticity_max = 1e-5  # Dimensionless
 
 
 class Gravitar:
@@ -127,6 +128,6 @@ with open(csv_filename, mode='w', newline='') as csvfile:
             'phi': simulation_results['phi'][i],
             'Pi': simulation_results['Pi'][i],
             'age': simulation_results['age'][i],
-            'e': simulation_results['ellipticity'][i],
+            'ellipticity': simulation_results['ellipticity'][i],
             'detectability': simulation_results['detectability'][i]
         })
