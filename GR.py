@@ -15,8 +15,8 @@ N = Birthrate * Tf  # Number of gravitars
 R_E = 8.2 * kpc  # m (Galactic-Earth distance)
 h_z = 0.075 * kpc  # m
 R_exp = 4.5 * kpc  # m
-a = 1.18285  # dimensionless
-tau = -2.46493285798560e-28
+a = 1.18285  # Dimensionless
+tau = -2.46493285798560e-28 # Dimensionless
 
 # Conversions
 kpc = 3.08567758128e19  # m
@@ -68,14 +68,14 @@ class Gravitar:
     def h_0(self, ri, zi, phi, Pi, age, ellipticity):
         return (4 * math.pow(pi, 2) * G * ellipticity * I_zz * self.f_GW(Pi, ellipticity, age)**2) / (math.pow(c, 4) * self.d(ri, zi, phi))
 
-    def decide_detectability(self, h_0, threshold):
-        if h_0 >= threshold:
-            return 1
-        else:
-            return 0
+   # def decide_detectability(self, h_0, threshold):
+   #    if h_0 >= threshold:
+   #         return 1
+   #     else:
+   #         return 0
 
     def simulate(self, N):
-        results = {'ri': [], 'zi': [], 'phi': [], 'Pi': [], 'age': [], 'e': [], 'detectability': []}
+        results = {'ri': [], 'zi': [], 'phi': [], 'Pi': [], 'age': [], 'ellipticity': []}
         for _ in range(N):
             ri = np.random.choice(np.linspace(ri_min, ri_max, N), p=self.pdf_r(np.linspace(ri_min, ri_max, N)))
             zi = np.random.choice(np.linspace(zi_min, zi_max, N), p=self.pdf_z(np.linspace(zi_min, zi_max, N)))
@@ -85,15 +85,15 @@ class Gravitar:
             e = np.random.choice(np.linspace(ellipticity_min, ellipticity_max, N), p=self.pdf_ellipticity(np.linspace(ellipticity_min, ellipticity_max, N)))
 
             h_0 = self.h_0(ri, zi, phi, Pi, age, e)
-            detectability = self.decide_detectability(h_0, threshold)  # You need to define threshold
+            # detectability = self.decide_detectability(h_0, threshold)  # You need to define threshold
 
             results['ri'].append(ri)
             results['zi'].append(zi)
             results['phi'].append(phi)
             results['Pi'].append(Pi)
             results['age'].append(age)
-            results['ellipticity'].append(e)
-            results['detectability'].append(detectability)
+            results['ellipticity'].append(ellipticity)
+           # results['detectability'].append(detectability)
 
         return results
 
