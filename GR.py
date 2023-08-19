@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 # Constants
 G = 6.6743e-11 # m^(3) kg^(-1) s^(-2)
@@ -13,6 +14,7 @@ N = Birthrate * Tf # Number of gravitars
 R_E = 8.2 * kpc # m (Galactic-Earth distance)
 h_z = 0.075 * kpc # m
 R_exp = 4.5 * kpc # m
+a = 1.18285 # dimensionless
 
 # Conversions
 kpc = 3.08567758128e19 # m
@@ -27,12 +29,13 @@ phi_min = 0 # rad
 phi_max = pi # rad
 Pi_min = 0 # s
 Pi_avg = 0.1 # s
+Pi_std = 0.1 # s
 Pi_max = float('inf') # s
 age_min = 0 # s
 age_max = Tf * Yr # s
-e_min = 10e-9 # Dimensionless
-e_avg = 10e-8 # Dimensionless
-e_max = 10e-5 # Dimensionless
+ellipticity_min = 10e-9 # Dimensionless
+ellipticity_avg = 10e-8 # Dimensionless
+ellipticity_max = 10e-5 # Dimensionless
 
 
 import numpy as np
@@ -41,29 +44,25 @@ import matplotlib.pyplot as plt
 class Gravitar:
     
     def pdf_r(self, ri):
-        # Define your PDF for radial displacement ri
-        # Example: return some_probability_density_function_for_r
+        return a * ri / R_exp**2 * math.exp(-ri / R_exp)
 
     def pdf_z(self, zi):
-        # Define your PDF for vertical displacement zi
-        # Example: return some_probability_density_function_for_z
+        return 1 / (2 * z_0) * math.exp(- zi / z_0)
 
     def pdf_phi(self, phi):
-        # Define your PDF for azimuthal angle phi
-        # Example: return some_probability_density_function_for_phi
+        return 1 / pi
         
     def pdf_P(self, Pi):
-        # Define your PDF for initial period of rotation Pi
-        # Example: return some_probability_density_function_for_Pi
+        return math.log(e, 10) / (Pi * Pi_avg * (2 pi)**(1/2) ) * math.exp( (math.log(Pi,10) - Pi_avg)^2 / (2 Pi_std**2) )
 
     def pdf_age(self, age):
         return 1 / Tf
 
-    def pdf_e(self, e):
+    def pdf_e(self, ellipticity):
         # Define your PDF for e
         # Example: return some_probability_density_function_for_e
         
-    def intrinsic_strain(self, ri, zi, Pi, age, e):
+    def intrinsic_strain(self, ri, zi, Pi, age, ellipticity):
         # Define your function to calculate intrinsic strain amplitude
         # Example: return some_calculation_function_for_intrinsic_strain
 
@@ -80,10 +79,10 @@ class Gravitar:
             zi = np.random.choice(np.linspace(zi_min, zi_max, N), p=self.pdf_z(np.linspace(zi_min, zi_max, N)))
             phi = np.random.choice(np.linspace(phi_min, phi_max, N), p=self.pdf_phi(np.linspace(phi_min, phi_max, N)))
             Pi = np.random.choice(np.linspace(Pi_min, Pi_max, N), p=self.pdf_P(np.linspace(Pi_min, Pi_max, N)))
-            age = np.random.choice(np.linspace(age_min, age_max, N), p=self.pdf_age(np.linspace(age_min, age_max, N)))
-            e = np.random.choice(np.linspace(e_min, e_max, N), p=self.pdf_e(np.linspace(e_min, e_max, N)))
+            age = np.random.choice(np.linspace(agellipticity_min, agellipticity_max, N), p=self.pdf_age(np.linspace(agellipticity_min, agellipticity_max, N)))
+            e = np.random.choice(np.linspace(ellipticity_min, ellipticity_max, N), p=self.pdf_e(np.linspace(ellipticity_min, ellipticity_max, N)))
             
-            h_0 = self.intrinsic_strain(ri, zi, Pi, age, e)
+            h_0 = self.intrinsic_strain(ri, zi, Pi, age, ellipticity)
             detectability = self.decide_detectability(h_0, threshold)
             
             results['ri'].append(ri)
