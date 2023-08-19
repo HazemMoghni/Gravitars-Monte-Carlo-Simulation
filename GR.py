@@ -6,6 +6,7 @@ import math
 G = 6.6743e-11 # m^(3) kg^(-1) s^(-2)
 c = 299792458 # m^(1) s^(-1)
 pi = 3.14159265358979 # Dimensionless
+e = 2.718281828459 # Dimensionless
 I_zz = 1e38 # kg^(1) m^(2)
 Birthrate = 0.01 # 1 per 100 Yr
 Ti = 0 # Yr
