@@ -85,7 +85,7 @@ class Gravitar:
             zi = np.random.choice(np.linspace(zi_min, zi_max, N), p=self.pdf_z(np.linspace(zi_min, zi_max, N)))
             phi = np.random.choice(np.linspace(phi_min, phi_max, N), p=self.pdf_phi(np.linspace(phi_min, phi_max, N)))
             Pi = np.random.choice(np.linspace(Pi_min, Pi_max, N), p=self.pdf_P(np.linspace(Pi_min, Pi_max, N)))
-            age = np.random.choice(np.linspace(agellipticity_min, agellipticity_max, N), p=self.pdf_age(np.linspace(agellipticity_min, agellipticity_max, N)))
+            age = np.random.choice(np.linspace(age_min, age_max, N), p=self.pdf_age(np.linspace(agellipticity_min, agellipticity_max, N)))
             e = np.random.choice(np.linspace(ellipticity_min, ellipticity_max, N), p=self.pdf_e(np.linspace(ellipticity_min, ellipticity_max, N)))
             
             h_0 = self.intrinsic_strain(ri, zi, Pi, age, ellipticity)
