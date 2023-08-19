@@ -127,6 +127,6 @@ with open(csv_filename, mode='w', newline='') as csvfile:
             'phi': simulation_results['phi'][i],
             'Pi': simulation_results['Pi'][i],
             'age': simulation_results['age'][i],
-            'e': simulation_results['e'][i],
+            'e': simulation_results['ellipticity'][i],
             'detectability': simulation_results['detectability'][i]
         })
