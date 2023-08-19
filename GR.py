@@ -51,13 +51,12 @@ class Gravitar:
         return 1 / pi
 
     def pdf_P(self, Pi):
-        return math.log(e, 10) / (Pi * Pi_avg * (2 * math.pow(pi, 0.5))) * \
-               math.exp(- math.pow(math.log(Pi, 10) - Pi_avg, 2) / (2 * math.pow(Pi_std, 2)))
+        return math.log(e, 10) / (Pi * Pi_avg * math.pow(2*pi, 0.5)) * math.exp(- math.pow(math.log(Pi, 10) - Pi_avg, 2) / (2 * math.pow(Pi_std, 2)))
 
     def pdf_age(self, age):
         return 1 / Tf
 
-    def pdf_e(self, ellipticity):
+    def pdf_ellipticity(self, ellipticity):
         return math.exp(-ellipticity / tau) / (tau * (1 - math.exp(-ellipticity_max / tau)))
 
     def f_GW(self, Pi, ellipticity, age):
@@ -84,7 +83,7 @@ class Gravitar:
             phi = np.random.choice(np.linspace(phi_min, phi_max, N), p=self.pdf_phi(np.linspace(phi_min, phi_max, N)))
             Pi = np.random.choice(np.linspace(Pi_min, Pi_max, N), p=self.pdf_P(np.linspace(Pi_min, Pi_max, N)))
             age = np.random.choice(np.linspace(age_min, age_max, N), p=self.pdf_age(np.linspace(age_min, age_max, N)))
-            e = np.random.choice(np.linspace(ellipticity_min, ellipticity_max, N), p=self.pdf_e(np.linspace(ellipticity_min, ellipticity_max, N)))
+            e = np.random.choice(np.linspace(ellipticity_min, ellipticity_max, N), p=self.pdf_ellipticity(np.linspace(ellipticity_min, ellipticity_max, N)))
 
             h_0 = self.intrinsic_strain(ri, zi, phi, Pi, age, e)
             detectability = self.decide_detectability(h_0, threshold)  # You need to define threshold
