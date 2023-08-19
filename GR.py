@@ -65,9 +65,8 @@ class Gravitar:
     def d(self, ri, zi, phi):
         return math.pow((zi**2 + (R_E - math.cos(phi) * ri)**2 + (math.sin(phi) * ri)**2), 0.5)
 
-    def intrinsic_strain(self, ri, zi, phi, Pi, age, ellipticity):
-        return (4 * math.pow(pi, 2) * G * ellipticity * I_zz * self.f_GW(Pi, ellipticity, age)**2) / \
-               (math.pow(c, 4) * self.d(ri, zi, phi))
+    def h_0(self, ri, zi, phi, Pi, age, ellipticity):
+        return (4 * math.pow(pi, 2) * G * ellipticity * I_zz * self.f_GW(Pi, ellipticity, age)**2) / (math.pow(c, 4) * self.d(ri, zi, phi))
 
     def decide_detectability(self, h_0, threshold):
         if h_0 >= threshold:
@@ -85,7 +84,7 @@ class Gravitar:
             age = np.random.choice(np.linspace(age_min, age_max, N), p=self.pdf_age(np.linspace(age_min, age_max, N)))
             e = np.random.choice(np.linspace(ellipticity_min, ellipticity_max, N), p=self.pdf_ellipticity(np.linspace(ellipticity_min, ellipticity_max, N)))
 
-            h_0 = self.intrinsic_strain(ri, zi, phi, Pi, age, e)
+            h_0 = self.h_0(ri, zi, phi, Pi, age, e)
             detectability = self.decide_detectability(h_0, threshold)  # You need to define threshold
 
             results['ri'].append(ri)
@@ -93,7 +92,7 @@ class Gravitar:
             results['phi'].append(phi)
             results['Pi'].append(Pi)
             results['age'].append(age)
-            results['e'].append(e)
+            results['ellipticity'].append(e)
             results['detectability'].append(detectability)
 
         return results
@@ -106,11 +105,28 @@ simulator = Gravitar()
 simulation_results = simulator.simulate(N)
 
 # Plot the results
-variables = ['ri', 'zi', 'Pi', 'age', 'e']
-plt.figure(figsize=(12, 8))
-for var in variables:
-    plt.hist(simulation_results[var], bins=30, alpha=0.5, label=var)
-plt.xlabel('Variable Value')
-plt.ylabel('Number of Stars')
-plt.legend()
-plt.show()
+# variables = ['ri', 'zi', 'phi', 'Pi', 'age', 'ellipticity']
+# plt.figure(figsize=(12, 8))
+# for var in variables:
+#     plt.hist(simulation_results[var], bins=30, alpha=0.5, label=var)
+# plt.xlabel('Variable Value')
+# plt.ylabel('Number of Stars')
+# plt.legend()
+# plt.show()
+
+# Save the results to a CSV file
+csv_filename = 'gravitar_simulation_results.csv'
+with open(csv_filename, mode='w', newline='') as csvfile:
+    fieldnames = ['ri', 'zi', 'phi', 'Pi', 'age', 'ellipticity', 'detectability']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    for i in range(N):
+        writer.writerow({
+            'ri': simulation_results['ri'][i],
+            'zi': simulation_results['zi'][i],
+            'phi': simulation_results['phi'][i],
+            'Pi': simulation_results['Pi'][i],
+            'age': simulation_results['age'][i],
+            'e': simulation_results['e'][i],
+            'detectability': simulation_results['detectability'][i]
+        })
