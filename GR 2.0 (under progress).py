@@ -33,8 +33,9 @@ zi_max = float('inf')  # kpc
 phi_min = 0  # rad
 phi_max = pi  # rad
 Pi_min = 0  # s
-Pi_avg = 0.1  # s
-Pi_std = 0.1  # s
+Pi_avg = 0.09  # s
+Pi_std = 0.53  # s
+Pi_mid = 0.0202976754202 # s
 Pi_max = float('inf')  # s
 age_min = 0  # s
 age_max = Tf # Yr
@@ -61,11 +62,11 @@ class Gravitar:
 
     def find_Pi(p, boolean):
         def pdf_Pi_p(Pi, p):
-            return a * ri / math.pow(R_exp, 2) * math.exp(-ri / R_exp) - p
+            return math.log(e, 10) / (Pi * Pi_std * math.pow(2*pi, 0.5)) * math.exp(- math.pow(math.log(Pi, 10) - math.log(Pi_avg,10), 2) / (2 * math.pow(Pi_std, 2)))
         if boolean is True:
-            return root_scalar(pdf_Pi_p, bracket=[ri_min, hmm], args=(p,)).root
+            return root_scalar(pdf_Pi_p, bracket=[Pi_min, Pi_mid], args=(p,)).root
         else:
-            return root_scalar(pdf_ri_p, bracket=[hmm, ri_max], args=(p,)).root
+            return root_scalar(pdf_ri_p, bracket=[Pi_mid, Pi_max], args=(p,)).root
             
     def age(p):
         return p * Tf
