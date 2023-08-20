@@ -2,6 +2,8 @@ import numpy as np
 # import matplotlib.pyplot as plt
 import math
 import csv
+from scipy.special import lambertw
+
 
 # Conversions
 kpc = 3.08567758128e19  # m
@@ -43,7 +45,7 @@ ellipticity_max = 1e-5  # Dimensionless
 
 class Gravitar:
     def ri(self, p):
-     #   return a * ri / math.pow(R_exp, 2) * math.exp(-ri / R_exp)
+        return -R_exp * lambertw(-(R_exp * p) / a)
 
     def zi(self, p):
         return h_z * math.log(1/(2 * h_z * p), e)
