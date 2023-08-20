@@ -42,32 +42,32 @@ ellipticity_max = 1e-5  # Dimensionless
 
 
 class Gravitar:
-    def pdf_r(self, ri):
-        return a * ri / math.pow(R_exp, 2) * math.exp(-ri / R_exp)
+    def ri(self, p):
+     #   return a * ri / math.pow(R_exp, 2) * math.exp(-ri / R_exp)
 
-    def pdf_z(self, zi):
-        return 1 / (2 * h_z) * math.exp(- zi / h_z)
+    def zi(self, p):
+        return h_z * math.log(1/(2 * h_z * p), e)
 
-    def pdf_phi(self, phi):
-        return 1 / pi
+    def phi(self, p):
+        return p * pi
 
-    def pdf_P(self, Pi):
-        return math.log(e, 10) / (Pi * Pi_avg * math.pow(2*pi, 0.5)) * math.exp(- math.pow(math.log(Pi, 10) - Pi_avg, 2) / (2 * math.pow(Pi_std, 2)))
+    def Pi(self, p):
+       # return math.log(e, 10) / (Pi * Pi_avg * math.pow(2*pi, 0.5)) * math.exp(- math.pow(math.log(Pi, 10) - Pi_avg, 2) / (2 * math.pow(Pi_std, 2)))
 
-    def pdf_age(self, age):
-        return 1 / Tf
+    def age(self, p):
+        return p * Tf
 
-    def pdf_ellipticity(self, ellipticity):
-        return math.exp(-ellipticity / tau) / (tau * (1 - math.exp(-ellipticity_max / tau)))
+    def ellipticity(self, p):
+        return tau * math.log(1 / (p * tau * (1 - math.exp(-ellipticity_max / tau)) , e)
 
-    def f_GW(self, Pi, ellipticity, age):
-        return math.pow((math.pow(Pi, 4) / 16 + (128 * math.pow(pi, 4) * G * ellipticity**2 * I_zz * age) / (5 * math.pow(c, 5))), -1/4)
+    def f_GW(self, p):
+        return math.pow((math.pow(self.Pi(p), 4) / 16 + (128 * math.pow(pi, 4) * G * self.ellipticity(p)**2 * I_zz * self.age(p)) / (5 * math.pow(c, 5))), -1/4)
 
-    def d(self, ri, zi, phi):
-        return math.pow((zi**2 + (R_E - math.cos(phi) * ri)**2 + (math.sin(phi) * ri)**2), 0.5)
+    def d(self, p):
+        return math.pow((self.zi(p)**2 + (R_E - math.cos(self.phi(p)) * self.ri(p))**2 + (math.sin(self.phi(p)) * self.ri(p))**2), 0.5)
 
-    def h_0(self, ri, zi, phi, Pi, age, ellipticity):
-        return (4 * math.pow(pi, 2) * G * ellipticity * I_zz * self.f_GW(Pi, ellipticity, age)**2) / (math.pow(c, 4) * self.d(ri, zi, phi))
+    def h_0(self, p):
+        return (4 * math.pow(pi, 2) * G * self.ellipticity(p) * I_zz * self.f_GW(p)**2) / (math.pow(c, 4) * self.d(p))
 
    # def decide_detectability(self, h_0, threshold):
    #    if h_0 >= threshold:
