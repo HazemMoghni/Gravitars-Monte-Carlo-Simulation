@@ -41,6 +41,7 @@ ellipticity_avg = 1e-7  # Dimensionless
 ellipticity_max = 1e-6  # Dimensionless
 
 
+# Radial displacement
 def ri(p):
     def cdf_ri_p(ri, p):
         return a_r - (a_r * math.exp(-ri / R_exp) * (R_exp + ri)) / R_exp - p
@@ -48,10 +49,12 @@ def ri(p):
     return root_scalar(cdf_ri_p, bracket=[ri_min, ri_max * 1.001], args=(p,)).root
 
 
+# Vertical displacement
 def zi(p):
     return h_z * math.log(1 / (1 - p), e)
 
 
+# Initial rotatoin period
 def Pi(p):
     return Pi_avg * math.pow(10, math.sqrt(2) * Pi_std * erfinv(2 * p - 1))
 
@@ -61,16 +64,16 @@ def ellipticity(p):
         return a_ellipticity * (math.exp(-ellipticity_min / ellipticity_avg) - math.exp(-ellipticity / ellipticity_avg)) / (1 - math.exp(-ellipticity_max / ellipticity_avg)) - p
     return root_scalar(cdf_ellipticity_p, bracket=[ellipticity_min, ellipticity_max * 10], args=(p,)).root
 
-
+# Gravitational wave frequency
 def f_GW(Pi, ellipticity, age):
     return math.pow((math.pow(Pi, 4) / 16 + (128 * math.pow(pi, 4) * G * math.pow(ellipticity, 2) * I_zz * (age * Yr)) / (5 * math.pow(c, 5))), -1 / 4)
 
-
+# Distance from the observer (Earth)
 def d(zi, phi, ri):
     return math.pow(
         math.pow(zi, 2) + math.pow(ri * math.cos(phi) - R_E, 2) + math.pow(ri * math.sin(phi), 2), 0.5)
 
-
+# Intrinstic strain
 def h_0(ellipticity, f_GW, d):
     return (4 * math.pow(pi, 2) * G * ellipticity * I_zz * math.pow(f_GW, 2)) / (math.pow(c, 4) * (d * kpc))
 
