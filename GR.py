@@ -26,7 +26,7 @@ a_ellipticity = 1.01005  # Dimensionless normalizing constant
 
 # Bounds
 ri_min = 0  # kpc
-ri_max = 15.001  # kpc
+ri_max = 15  # kpc
 zi_min = 0  # kpc
 phi_min = 0  # rad
 phi_max = pi  # rad
@@ -45,7 +45,7 @@ def ri(p):
     def cdf_ri_p(ri, p):
         return a_r - (a_r * math.exp(-ri / R_exp) * (R_exp + ri)) / R_exp - p
 
-    return root_scalar(cdf_ri_p, bracket=[ri_min, ri_max], args=(p,)).root
+    return root_scalar(cdf_ri_p, bracket=[ri_min, ri_max*1.001], args=(p,)).root
 
 
 def zi(p):
