@@ -26,7 +26,7 @@ a_ellipticity= 1.01005 # Dimensionless normalizing constant
 
 # Bounds
 ri_min = 0  # kpc
-ri_max = 15.1  # kpc
+ri_max = 15  # kpc
 zi_min = 0  # kpc
 phi_min = 0  # rad
 phi_max = pi  # rad
@@ -38,7 +38,7 @@ age_min = 0  # Yr
 age_max = Tf  # Yr
 ellipticity_min = 1e-9  # Dimensionless
 ellipticity_avg = 1e-7  # Dimensionless
-ellipticity_max = 1e-6  # Dimensionles
+ellipticity_max = 1e-6  # Dimensionless
 
 def ri(p):
     def cdf_ri_p(ri, p):
@@ -58,13 +58,11 @@ def ellipticity(p):
     return root_scalar(cdf_ellipticity_p, bracket=[ellipticity_min, ellipticity_max * 10], args=(p,)).root
 
 def f_GW(Pi,ellipticity,age):
-    return math.pow((math.pow(Pi, 4) / 16 + (
-                128 * math.pow(pi, 4) * G * math.pow(ellipticity, 2) * I_zz * (age * Yr)) / (5 * math.pow(c, 5))),
-                    -1 / 4)
+    return math.pow((math.pow(Pi, 4) / 16 + (128 * math.pow(pi, 4) * G * math.pow(ellipticity, 2) * I_zz * (age * Yr)) / (5 * math.pow(c, 5))), -1 / 4)
 
 def d(zi,phi,ri):
     return math.pow(
-        math.pow(zi, 2) + math.pow(R_E - ri * math.sin(phi), 2) + math.pow(ri * math.cos(phi), 2), 0.5)
+        math.pow(zi, 2) + math.pow(ri * math.cos(phi) - R_E, 2) + math.pow(ri * math.sin(phi), 2), 0.5)
 
 def h_0(ellipticity,f_GW,d):
     return (4 * math.pow(pi, 2) * G * ellipticity * I_zz * math.pow(f_GW, 2)) / (math.pow(c, 4) * (d * kpc))
