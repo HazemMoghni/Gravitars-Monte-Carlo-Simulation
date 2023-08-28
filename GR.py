@@ -45,7 +45,7 @@ def ri(p):
     def cdf_ri_p(ri, p):
         return a_r - (a_r * math.exp(-ri / R_exp) * (R_exp + ri)) / R_exp - p
 
-    return root_scalar(cdf_ri_p, bracket=[ri_min, ri_max*1.001], args=(p,)).root
+    return root_scalar(cdf_ri_p, bracket=[ri_min, ri_max * 1.001], args=(p,)).root
 
 
 def zi(p):
