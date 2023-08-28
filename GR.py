@@ -26,7 +26,7 @@ a_ellipticity = 1.01005  # Dimensionless normalizing constant
 
 # Bounds
 ri_min = 0  # kpc
-ri_max = 15  # kpc
+ri_max = 15.001  # kpc
 zi_min = 0  # kpc
 phi_min = 0  # rad
 phi_max = pi  # rad
