@@ -22,7 +22,7 @@ R_E = 8.2  # kpc (Galactic-Earth distance)
 h_z = 0.075  # kpc
 R_exp = 4.5  # kpc
 a_r = 1.18285  # Dimensionless normalizing constant
-a_ellipticity= 1.01005 # Dimensionless normalizing constant
+a_ellipticity = 1.01005  # Dimensionless normalizing constant
 
 # Bounds
 ri_min = 0  # kpc
@@ -40,32 +40,40 @@ ellipticity_min = 1e-9  # Dimensionless
 ellipticity_avg = 1e-7  # Dimensionless
 ellipticity_max = 1e-6  # Dimensionless
 
+
 def ri(p):
     def cdf_ri_p(ri, p):
         return a_r - (a_r * math.exp(-ri / R_exp) * (R_exp + ri)) / R_exp - p
 
     return root_scalar(cdf_ri_p, bracket=[ri_min, ri_max], args=(p,)).root
 
+
 def zi(p):
     return h_z * math.log(1 / (1 - p), e)
+
 
 def Pi(p):
     return Pi_avg * math.pow(10, math.sqrt(2) * Pi_std * erfinv(2 * p - 1))
 
+
 def ellipticity(p):
     def cdf_ellipticity_p(ellipticity, p):
-        return a_ellipticity * (math.exp(-ellipticity_min /ellipticity_avg) - math.exp(-ellipticity / ellipticity_avg)) / ((1 - math.exp(-ellipticity_max / ellipticity_avg))) - p
+        return a_ellipticity * (math.exp(-ellipticity_min / ellipticity_avg) - math.exp(-ellipticity / ellipticity_avg)) / (1 - math.exp(-ellipticity_max / ellipticity_avg)) - p
     return root_scalar(cdf_ellipticity_p, bracket=[ellipticity_min, ellipticity_max * 10], args=(p,)).root
 
-def f_GW(Pi,ellipticity,age):
+
+def f_GW(Pi, ellipticity, age):
     return math.pow((math.pow(Pi, 4) / 16 + (128 * math.pow(pi, 4) * G * math.pow(ellipticity, 2) * I_zz * (age * Yr)) / (5 * math.pow(c, 5))), -1 / 4)
 
-def d(zi,phi,ri):
+
+def d(zi, phi, ri):
     return math.pow(
         math.pow(zi, 2) + math.pow(ri * math.cos(phi) - R_E, 2) + math.pow(ri * math.sin(phi), 2), 0.5)
 
-def h_0(ellipticity,f_GW,d):
+
+def h_0(ellipticity, f_GW, d):
     return (4 * math.pow(pi, 2) * G * ellipticity * I_zz * math.pow(f_GW, 2)) / (math.pow(c, 4) * (d * kpc))
+
 
 with open('output.csv', 'a', newline='') as file:
     writer = csv.writer(file)
@@ -80,9 +88,9 @@ with open('output.csv', 'a', newline='') as file:
         Pi_output = Pi(np.random.uniform(0, 1))
         age_output = np.random.uniform(0, age_max)
         ellipticity_output = ellipticity(np.random.uniform(0, 1))
-        f_GW_output = f_GW(Pi_output,ellipticity_output,age_output)
-        d_output = d(zi_output,phi_output,ri_output)
-        h_0_output = h_0(ellipticity_output,f_GW_output,d_output)
+        f_GW_output = f_GW(Pi_output, ellipticity_output, age_output)
+        d_output = d(zi_output, phi_output, ri_output)
+        h_0_output = h_0(ellipticity_output, f_GW_output, d_output)
         writer.writerow(
             [ri_output, zi_output, phi_output, Pi_output, age_output, ellipticity_output, f_GW_output, d_output,
              h_0_output])
